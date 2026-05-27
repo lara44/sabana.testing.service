@@ -38,6 +38,9 @@ namespace Infrastructure.data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Products", (string)null);
                 });
 #pragma warning restore 612, 618

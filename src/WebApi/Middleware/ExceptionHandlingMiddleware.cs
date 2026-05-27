@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Presentation.Common;
 
 namespace WebApi.Middleware;
@@ -53,6 +54,12 @@ public class ExceptionHandlingMiddleware
             _logger.LogWarning(ex, "Acceso no autorizado: {Message}", ex.Message);
             await HandleExceptionAsync(context, StatusCodes.Status403Forbidden, $"Acceso denegado: {ex.Message}");
         }
+        catch (DbUpdateException ex) when (IsUniqueConstraintViolation(ex))
+        {
+            _logger.LogWarning(ex, "Violacion de restriccion unica: {Message}", ex.Message);
+            await HandleExceptionAsync(context, StatusCodes.Status409Conflict,
+                "Ya existe un producto con ese nombre.");
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error inesperado: {Message}", ex.Message);
@@ -90,5 +97,12 @@ public class ExceptionHandlingMiddleware
         };
 
         await context.Response.WriteAsJsonAsync(response);
+    }
+
+    private static bool IsUniqueConstraintViolation(DbUpdateException ex)
+    {
+        var message = ex.InnerException?.Message ?? ex.Message;
+        return message.Contains("duplicate key value violates unique constraint", StringComparison.OrdinalIgnoreCase)
+            || message.Contains("IX_Products_Name", StringComparison.OrdinalIgnoreCase);
     }
 }

@@ -12,7 +12,7 @@ using sabana.testing.service;
 namespace Infrastructure.data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260527154445_InitialCreate")]
+    [Migration("20260527222414_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -40,6 +40,9 @@ namespace Infrastructure.data.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Products", (string)null);
                 });
