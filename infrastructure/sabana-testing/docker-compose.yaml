@@ -1,0 +1,29 @@
+
+services:
+  sabana-testing-postgres:
+    image: postgres:16-alpine
+    container_name: sabana-testing-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: sabana-testing_db
+    ports:
+      - "5443:5432"
+    volumes:
+      - sabana-testing-postgres-data:/var/lib/postgresql/data
+    networks:
+      - sabana-testing-network
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d sabana-testing_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+volumes:
+  sabana-testing-postgres-data:
+
+networks:
+  sabana-testing-network:
+    driver: bridge
