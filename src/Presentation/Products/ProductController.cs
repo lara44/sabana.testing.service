@@ -1,6 +1,9 @@
 using Application.Products.Commands.CreateProduct;
+using Application.Products.Queries.GetProducts;
 using AtcMediator;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Common;
 
 namespace Presentation.Products;
 
@@ -16,9 +19,18 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateProductCommand command)
+    public async Task<ActionResult<ResponseDto<CreateProductResult>>> Create([FromBody] CreateProductCommand command)
     {
         var result = await _mediator.ExecuteAsync(command);
-        return CreatedAtAction(nameof(Create), new { id = result.Id }, result);
+        var response = ResponseDto<CreateProductResult>.Success("Producto creado correctamente.", result);
+        response.Code = StatusCodes.Status201Created;
+        return StatusCode(StatusCodes.Status201Created, response);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<ResponseDto<IReadOnlyCollection<GetProductsResult>>>> GetAll()
+    {
+        var result = await _mediator.ExecuteAsync(new GetProductsQuery());
+        return Ok(ResponseDto<IReadOnlyCollection<GetProductsResult>>.Success(data: result));
     }
 }

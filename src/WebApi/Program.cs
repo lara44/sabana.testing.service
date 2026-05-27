@@ -2,6 +2,7 @@ using Application;
 using Microsoft.EntityFrameworkCore;
 using Presentation;
 using sabana.testing.service;
+using WebApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,8 @@ builder.Services.AddApplication();
 builder.Services.AddPresentation();
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 using (var scope = app.Services.CreateScope())
 {

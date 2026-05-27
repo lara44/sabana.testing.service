@@ -1,5 +1,6 @@
 using Domain.Aggregates.Products;
 using Infrastructure.Mappers;
+using Microsoft.EntityFrameworkCore;
 using sabana.testing.service;
 
 namespace Infrastructure.Repositories;
@@ -21,5 +22,14 @@ public class ProductRepository : IProductRepository
         await _context.SaveChangesAsync(cancellationToken);
 
         return ProductMapper.ToDomainEntity(entity);
+    }
+
+    public async Task<IReadOnlyCollection<Product>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        var entities = await _context.ProductEntities
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+
+        return entities.Select(ProductMapper.ToDomainEntity).ToList();
     }
 }
