@@ -17,6 +17,16 @@ public class Product : AggregateRoot<Guid>
 
     public static Product Create(string name, decimal price)
     {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            throw new ArgumentException("El nombre del producto es obligatorio.", nameof(name));
+        }
+
+        if (price <= 0)
+        {
+            throw new ArgumentException("El precio del producto debe ser mayor que cero.", nameof(price));
+        }
+
         return new Product(Guid.NewGuid(), name, price);
     }
 

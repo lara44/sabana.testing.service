@@ -6,14 +6,30 @@ using Domain.Aggregates.Products;
 public sealed class ProductAggregateTests
 {
     [TestMethod]
-    public void Create_ShouldThrowArgumentException_WhenNameIsEmpty()
+    public void Given_EmptyName_When_Create_Then_ThrowsArgumentException()
     {
-        Assert.Throws<ArgumentException>(() => Product.Create(string.Empty, 1200m));
+        // Arrange (Given)
+        var name = string.Empty;
+        var price = 1200m;
+
+        // Act (When)
+        Action act = () => Product.Create(name, price);
+
+        // Assert (Then)
+        Assert.Throws<ArgumentException>(act);
     }
 
     [TestMethod]
-    public void Create_ShouldThrowArgumentException_WhenPriceIsNotPositive()
+    public void Given_NonPositivePrice_When_Create_Then_ThrowsArgumentException()
     {
-        Assert.Throws<ArgumentException>(() => Product.Create("Arroz", 0m));
+        // Arrange (Given)
+        var name = "Arroz";
+        var price = 0m;
+
+        // Act (When)
+        Action act = () => Product.Create(name, price);
+
+        // Assert (Then)
+        Assert.Throws<ArgumentException>(act);
     }
 }
