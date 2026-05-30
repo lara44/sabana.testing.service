@@ -18,6 +18,11 @@ tests/sabana.testing.service.tests/
   Integration/
     Infrastructure/
     WebApi/
+  docs/
+    01-tdd.md
+    02-coverage.md
+    03-sonarqube.md
+    04-unit-tests-summary.md
 ```
 
 Regla general:
@@ -103,6 +108,12 @@ Desde la raiz del repositorio:
 ```bash
 dotnet test
 ```
+
+## Guias tecnicas
+
+- Cobertura local: `docs/02-coverage.md`
+- Analisis SonarQube: `docs/03-sonarqube.md`
+- Resumen de pruebas unitarias: `docs/04-unit-tests-summary.md`
 
 ## Notas
 
