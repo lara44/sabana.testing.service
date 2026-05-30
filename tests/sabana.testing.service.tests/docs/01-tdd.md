@@ -22,6 +22,7 @@ tests/sabana.testing.service.tests/
     01-tdd.md
     02-coverage.md
     03-sonarqube.md
+    04-unit-tests-summary.md
 ```
 
 Regla general:
@@ -112,6 +113,7 @@ dotnet test
 
 - Cobertura local: `docs/02-coverage.md`
 - Analisis SonarQube: `docs/03-sonarqube.md`
+- Resumen de pruebas unitarias: `docs/04-unit-tests-summary.md`
 
 ## Notas
 
