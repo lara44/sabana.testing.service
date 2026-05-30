@@ -69,6 +69,11 @@ Generated\ Files/
 [Bb]uild[Ll]og.*
 *.trx
 
+# Test and quality artifacts (repository root)
+/TestResults/
+/Coverage/
+/StrykerOutput/
+
 # NUnit
 *.VisualState.xml
 TestResult.xml
