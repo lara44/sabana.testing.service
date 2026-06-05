@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build-test-coverage:
+    runs-on: ubuntu-latest
+
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+          cache: true
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Unit Tests
+        run: dotnet test tests/sabana.testing.service.tests/sabana.testing.service.tests.csproj --no-build --configuration Release --filter "FullyQualifiedName~unit" --logger "console;verbosity=minimal"
+
+      - name: Integration Tests
+        run: dotnet test tests/sabana.testing.service.tests/sabana.testing.service.tests.csproj --no-build --configuration Release --filter "FullyQualifiedName~integration" --logger "console;verbosity=minimal"
+
+      - name: Coverage
+        run: |
+          dotnet test tests/sabana.testing.service.tests/sabana.testing.service.tests.csproj \
+            --no-build \
+            --configuration Release \
+            --settings tests/sabana.testing.service.tests/test.runsettings \
+            --collect:"XPlat Code Coverage" \
+            --results-directory TestResults
+
+      - name: Install ReportGenerator
+        run: |
+          dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.*
+          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Generate Coverage Report
+        run: |
+          reportgenerator \
+            -reports:"TestResults/**/coverage.opencover.xml" \
+            -targetdir:"Coverage" \
+            -reporttypes:"Html;Cobertura;TextSummary"
+
+      - name: Coverage Summary
+        run: cat Coverage/Summary.txt
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: TestResults
+
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: Coverage
