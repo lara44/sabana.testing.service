@@ -80,6 +80,17 @@ Swagger/OpenAPI en desarrollo:
 - Endpoint raiz: `GET /` responde `Hello World!`.
 - Endpoint de productos: `GET /api/products`.
 
+## 5. Pruebas de integracion (SQLite InMemory)
+
+Las pruebas de integracion de la Unidad 4 usan SQLite InMemory para ejecutarse sin infraestructura externa.
+Esto permite correrlas en local y en CI sin depender de Docker ni de una base fisica.
+
+Ejemplo local:
+
+```bash
+dotnet test tests/sabana.testing.service.tests/sabana.testing.service.tests.csproj --filter "FullyQualifiedName~integration"
+```
+
 ## Problemas comunes
 
 - Error de conexion a BD:
