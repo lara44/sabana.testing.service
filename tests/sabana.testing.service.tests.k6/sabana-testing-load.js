@@ -38,8 +38,8 @@ export const options = {
       executor: 'ramping-vus',
       startVUs: 0,
       stages: [
-        { duration: '30s', target: 10 }, // ramp-up: 0 → 10 VUs en 30s
-        { duration: '60s', target: 10 }, // sostener 10 VUs por 60s
+        { duration: '15s', target: 10 }, // ramp-up: 0 → 10 VUs en 15s
+        { duration: '40s', target: 10 }, // sostener 10 VUs por 40s
         { duration: '5s',  target: 0  }, // ramp-down
       ],
       gracefulRampDown: '5s',
@@ -52,7 +52,7 @@ export const options = {
       startVUs: 0,
       stages: [
         { duration: '10s', target: 50 }, // ramp-up: 0 → 50 VUs en 10s
-        { duration: '60s', target: 50 }, // sostener 50 VUs por 60s
+        { duration: '45s', target: 50 }, // sostener 50 VUs por 45s
         { duration: '5s',  target: 0  }, // ramp-down
       ],
       gracefulRampDown: '5s',
